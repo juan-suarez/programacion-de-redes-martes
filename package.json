@@ -1,0 +1,20 @@
+{
+  "name": "servidor-node",
+  "version": "1.0.0.0",
+  "description": "servidor para la materia de programacion de redes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "servidor",
+    "node",
+    "programacion de redes"
+  ],
+  "author": "Juan Manuel Suarez",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
