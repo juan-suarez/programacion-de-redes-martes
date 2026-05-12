@@ -3,13 +3,44 @@ const servidor = express()
 const port = 3000
 
 // middlewares
-servidor.use(express.json())
 
 
 function RecibirPeticion(request, response ,next){
-  console.log("Esta llegando una peticion!!!!")
+  const ruta = request.url
+  console.log("Esta llegando una peticion a la ruta: ", ruta)
   next()
 } 
+
+function contentTypeMiddleware(request, response,next ){
+  const headers = request.headers
+  const contentType = headers["content-type"]
+  if (contentType === "application/json" || contentType === "text/plain" ){
+    next()
+  }
+  else{
+    response.sendStatus(415)
+  }
+}
+
+function authorizationMiddleware(request, response, next){
+  const password = "1234"
+  const headers = request.headers
+  const authorization = headers["authorization"]
+  console.log(authorization)
+  console.log(headers)
+  if (authorization == undefined){
+    response.sendStatus(401)
+  }
+  if (authorization != password){
+    response.status(401).send("Contraseña incorrecta!!!")
+  }
+  next()
+}
+
+
+servidor.use(authorizationMiddleware)
+servidor.use(contentTypeMiddleware)
+servidor.use(express.json())
 servidor.use(RecibirPeticion)
 
 
