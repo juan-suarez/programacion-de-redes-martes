@@ -1,5 +1,10 @@
 const express = require('express')
+const http = require('http')
+const { Server } = require('socket.io')
+
 const servidor = express()
+const contenedor = http.createServer(servidor)
+const session = new Server(contenedor) 
 const port = 3000
 
 // middlewares
@@ -71,11 +76,31 @@ function crearEstudiante(request, response){
   response.sendStatus(201)
 }
 servidor.post("/estudiantes", crearEstudiante)
+///// sesiion //////
+
+function onMessage(mensaje){
+  console.log("he escuchado el evento mensaje: ", mensaje)
+
+  session.emit("Respuesta", "Esta es una respuesta!!")
+}
+
+
+function initSession(cliente){
+  console.log("Alguien se ha conectado!", cliente.id)
+
+  cliente.on("Mensaje", onMessage)
+
+}
+
+session.on("connect", initSession)
+
 //inicializacion
+
 function iniciarServidor(){
   console.log("Hola mundo!!!")
 }
-servidor.listen(port, iniciarServidor)
+
+contenedor.listen(port, iniciarServidor)
 
 
 
